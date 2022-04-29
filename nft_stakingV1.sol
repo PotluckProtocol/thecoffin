@@ -59,10 +59,99 @@ contract NFTSTAKE is IERC721Receiver, ReentrancyGuard, Pausable, AccessControl
     //Wallet => tokenIDs[]
     mapping(address => uint256[]) public balanceOfToken;
 
+    //openzepplin 
+
+    // Mapping from owner to list of owned token IDs
+    mapping(address => mapping(uint256 => uint256)) private _ownedTokens;
+
+    // Mapping from token ID to index of the owner tokens list
+    mapping(uint256 => uint256) private _ownedTokensIndex;
+
+    // Array with all token ids, used for enumeration
+    uint256[] private _allTokens;
+
+    // Mapping from token id to position in the allTokens array
+    mapping(uint256 => uint256) private _allTokensIndex;
+
+
+    function _addTokenToOwnerEnumeration(address to, uint256 tokenId) private 
+    {
+        uint256 length = nftToken.balanceOf(to);
+        _ownedTokens[to][length] = tokenId;
+        _ownedTokensIndex[tokenId] = length;
+    }
+
+
+    function _removeTokenFromOwnerEnumeration(address from, uint256 tokenId) private 
+    {
+        // To prevent a gap in from's tokens array, we store the last token in the index of the token to delete, and
+        // then delete the last slot (swap and pop).
+
+        uint256 lastTokenIndex = nftToken.balanceOf(from) - 1;
+        uint256 tokenIndex = _ownedTokensIndex[tokenId];
+
+        // When the token to delete is the last token, the swap operation is unnecessary
+        if (tokenIndex != lastTokenIndex) {
+            uint256 lastTokenId = _ownedTokens[from][lastTokenIndex];
+
+            _ownedTokens[from][tokenIndex] = lastTokenId; // Move the last token to the slot of the to-delete token
+            _ownedTokensIndex[lastTokenId] = tokenIndex; // Update the moved token's index
+        }
+
+        // This also deletes the contents at the last position of the array
+        delete _ownedTokensIndex[tokenId];
+        delete _ownedTokens[from][lastTokenIndex];
+    }
+
+    function _addTokenToAllTokensEnumeration(uint256 tokenId) private 
+    {
+        _allTokensIndex[tokenId] = _allTokens.length;
+        _allTokens.push(tokenId);
+    }
+
+    function _removeTokenFromAllTokensEnumeration(uint256 tokenId) private 
+    {
+        // To prevent a gap in the tokens array, we store the last token in the index of the token to delete, and
+        // then delete the last slot (swap and pop).
+
+        uint256 lastTokenIndex = _allTokens.length - 1;
+        uint256 tokenIndex = _allTokensIndex[tokenId];
+
+        // When the token to delete is the last token, the swap operation is unnecessary. However, since this occurs so
+        // rarely (when the last minted token is burnt) that we still do the swap here to avoid the gas cost of adding
+        // an 'if' statement (like in _removeTokenFromOwnerEnumeration)
+        uint256 lastTokenId = _allTokens[lastTokenIndex];
+
+        _allTokens[tokenIndex] = lastTokenId; // Move the last token to the slot of the to-delete token
+        _allTokensIndex[lastTokenId] = tokenIndex; // Update the moved token's index
+
+        // This also deletes the contents at the last position of the array
+        delete _allTokensIndex[tokenId];
+        _allTokens.pop();
+    }
+    
+
     function retrieveTokensIdsOfWallet(address wallet) public view returns(uint256[] memory)
     {
         return balanceOfToken[wallet];
     }
+
+    function getIndexOfTokenFromID(uint256 tokenId) public view returns(uint256)
+    {
+        return _allTokensIndex[tokenId];
+    }
+
+    function totalSupply() public view returns (uint256) 
+    {
+        return _allTokens.length;
+    }
+
+    function tokenByIndex(uint256 index) public view returns (uint256)
+    {
+        require(index < totalSupply(), "global index out of bounds");
+        return _allTokens[index];
+    }
+    
     
 
     event NftStaked(address indexed staker, uint256 tokenId, uint256 blockNumber);
@@ -181,9 +270,17 @@ contract NFTSTAKE is IERC721Receiver, ReentrancyGuard, Pausable, AccessControl
 
     function _unStakeNFT(uint256 tokenId) internal onlyStaker(tokenId) requireTimeElapsed(tokenId) returns (bool) 
     {
+
+        //require(getIndexOfTokenFromID(tokenId) < balanceOfToken[msg.sender].length);
         _payoutStake(tokenId);
         delete receipt[tokenId];
-        delete balanceOfToken[msg.sender][tokenId];
+        for (uint i = getIndexOfTokenFromID(tokenId); i< balanceOfToken[msg.sender].length-1; i++)
+        {
+            balanceOfToken[msg.sender][i] = balanceOfToken[msg.sender][i+1];
+        }
+        balanceOfToken[msg.sender].pop();
+        _removeTokenFromOwnerEnumeration(msg.sender, tokenId);
+        _removeTokenFromAllTokensEnumeration(tokenId);
         nftToken.safeTransferFrom(address(this), msg.sender, tokenId);
         emit NftUnStaked(msg.sender, tokenId, block.number);
         return true;
@@ -226,7 +323,8 @@ contract NFTSTAKE is IERC721Receiver, ReentrancyGuard, Pausable, AccessControl
         require(nftToken.ownerOf(tokenId) != address(this), "Stake: Token is already staked in this contract");
         nftToken.safeTransferFrom(msg.sender, address(this), tokenId);
         require(nftToken.ownerOf(tokenId) == address(this), "Stake: Failed to take possession of NFT");
-
+        _addTokenToOwnerEnumeration(msg.sender, tokenId);
+        _addTokenToAllTokensEnumeration(tokenId);
         receipt[tokenId].tokenId = tokenId;
         receipt[tokenId].stakedFromBlock = block.number;
         receipt[tokenId].owner = msg.sender;
@@ -257,16 +355,6 @@ contract NFTSTAKE is IERC721Receiver, ReentrancyGuard, Pausable, AccessControl
         }
 
         return block.number-(receipt[tokenId].stakedFromBlock);
-    }
-
-    function _adminSupport(uint256 tokenId) public onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) 
-    {
-        _payoutStake(tokenId);
-        delete receipt[tokenId];
-        delete balanceOfToken[msg.sender][tokenId];
-        nftToken.safeTransferFrom(address(this), msg.sender, tokenId);
-        emit NftUnStaked(msg.sender, tokenId, block.number);
-        return true;
     }
     
 	function setNFT(ERC721 value) public onlyRole(DEFAULT_ADMIN_ROLE) 
