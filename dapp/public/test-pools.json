@@ -1,0 +1,11 @@
+[
+    {
+        "name": "TESTNET test project",
+        "coverImage": "/images/pools/test/cover.png",
+        "poolContractAddress": "0x4e9938A4EdDC6cF61962AF986E52D376B1a778c6",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "nftContractAddress": "0x53eACFC46eB98FB00E9d9344143A261d14b957F6",
+        "networkId": 4002,
+        "endDateTime": "2022-05-28T10:00:00.000Z"
+    }
+]

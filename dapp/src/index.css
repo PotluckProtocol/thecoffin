@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: Artico;
+    src: url('/public/fonts/cretype  Artico.otf');
+}
+
+@font-face {
+    font-family: Artico;
+    src: url('/public/fonts/cretype  Artico Black.otf');
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: Artico;
+    src: url('/public/fonts/cretype  Artico ExtraBold.otf');
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: Artico;
+    src: url('/public/fonts/cretype  Artico Bold.otf');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: Artico;
+    src: url('/public/fonts/cretype  Artico Medium.otf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Backbones;
+    src: url('/public/fonts/Backbones.otf');
+}
+
+@font-face {
+    font-family: Chomsky;
+    src: url('/public/fonts/Chomsky.otf');
+}
+
+body {
+    position: relative;
+    background-color: #000000;
+    margin: 0;
+    font-family: Artico, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    background-image: url('/public/images/bg.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}

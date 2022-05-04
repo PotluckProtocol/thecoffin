@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Creatures of the Cave",
+        "coverImage": "/images/pools/cotc/cover.png",
+        "poolContractAddress": "0xC802848D899b8c2ed1298570D1e0004D284035b4",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "nftContractAddress": "0xDAC2031173c07BD622759051Df373b708A1acbcE",
+        "networkId": 250,
+        "endDateTime": "2022-06-02T22:00:00.000Z"
+    },
+    {
+        "name": "AcidCats",
+        "coverImage": "/images/pools/acidcats/cover.png",
+        "poolContractAddress": "0x204C992D413a85E959e2E151E317e6367e1b2eA4",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "nftContractAddress": "0xa81c9D00D29Afdc83b7e788a29Ec96A5BD81A8EA",
+        "networkId": 250,
+        "endDateTime": "2022-06-02T22:00:00.000Z"
+    },
+    {
+        "name": "Fantom Baby Punks",
+        "coverImage": "/images/pools/babypunks/cover.jpg",
+        "poolContractAddress": "0xF6B171dF653C641d78fC77fA5706Cdf873541A1b",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "nftContractAddress": "0xDb8F58Ab15e967B7Dcc82D8907C2ed59d2ea9686",
+        "networkId": 250,
+        "endDateTime": "2022-07-02T22:00:00.000Z"
+    },
+    {
+        "name": "Potluck Realm Orcs",
+        "coverImage": "/images/pools/orcs/cover.png",
+        "poolContractAddress": "0x466ED80284a05E5BB89e1bD83c53aa6083eBfc3c",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "nftContractAddress": "0xdC2BC583f45450e6Ae271C48C941b10e073380B5",
+        "networkId": 250,
+        "endDateTime": "2022-06-02T22:00:00.000Z"
+    }
+]
