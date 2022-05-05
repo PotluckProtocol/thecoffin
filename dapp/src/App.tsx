@@ -55,9 +55,24 @@ const Disclaimer = styled.div`
     text-align: center;  
 `;
 
+const CaveCompounder = styled.div`
+    color: white;
+    font-size: 1.2rem;
+`;
+
+const CaveCompounderImage = styled.img`
+
+transition: filter 500ms ease-in-out;
+
+    &:hover {
+        filter: invert(79%) sepia(22%) saturate(2204%) hue-rotate(224deg) brightness(99%) contrast(69%)
+    }
+`;
+
 const Quu = styled.span`
     font-size: 0;
 `;
+
 
 const App: React.FC = () => {
 
@@ -107,6 +122,12 @@ const App: React.FC = () => {
                 </div>
 
                 <ListPools mode={mode} />
+
+
+                <CaveCompounder className="block mb-6 mt-12 px-6 md:flex justify-center items-center">
+                    <div className='md:mr-4 mb-4 md:mb-0 text-center'>Autocompound your rewards in </div>
+                    <a href="https://thecavecompounder.com"><CaveCompounderImage className='mx-auto md:mx-0' src="/images/CaveCompounder.png" /></a>
+                </CaveCompounder>
             </Container >
             <ToastContainer />
 
