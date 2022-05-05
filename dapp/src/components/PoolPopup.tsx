@@ -240,7 +240,7 @@ export const PoolPopup: React.FC<PoolPopupProps> = ({
 
         viewContent = (
             <UnstakingContainer className='mt-4'>
-                <Paragraph className='mb-2'>You have buried <b>{poolContractContext.walletTokenIds.length}</b> tokens, select tokens to be digged out...</Paragraph>
+                <Paragraph className='mb-2'>You have buried <b>{poolContractContext.walletTokenIds.length}</b> tokens, select tokens to be dug out...</Paragraph>
 
                 <SelectTokens
                     tokens={poolContractContext.walletTokenIds}
@@ -265,7 +265,7 @@ export const PoolPopup: React.FC<PoolPopupProps> = ({
                     <FiXCircle size={30} />
                 </CloseButton>
                 <PoolName className="flex items-center justify-center mb-4" height={45}>{poolBaseInfo.name}</PoolName>
-                <Paragraph className="mb-2">Your intend?</Paragraph>
+                <Paragraph className="mb-2">Your intent?</Paragraph>
                 <ButtonGroup
                     buttons={buttonGroupButtons}
                     buttonStyle={buttonStyle}

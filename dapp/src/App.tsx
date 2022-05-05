@@ -5,8 +5,9 @@ import styled from 'styled-components';
 import { ListPools } from './components/ListPools';
 import { Navbar } from './components/Navbar';
 import 'react-toastify/dist/ReactToastify.css';
-import useAccount from './account/useAccount';
 import classNames from 'classnames';
+import useUser from './account/useUser';
+import { Loading } from './components/Loading';
 
 const Container = styled.div`
     max-width: 1200px;
@@ -60,7 +61,7 @@ const Quu = styled.span`
 
 const App: React.FC = () => {
 
-    const account = useAccount();
+    const user = useUser();
     const [mode, setMode] = useState<'basic' | 'harvest'>('basic')
 
     const handleSwitchChange = (checked: boolean) => {
@@ -72,8 +73,12 @@ const App: React.FC = () => {
     }
 
     const switchContainerClasses = classNames('mb-8 px-4', {
-        'invisible': !account
+        'invisible': !user.account
     });
+
+    if (!user.isInitialized) {
+        return null;
+    }
 
     return (
         <div className="App relative">
@@ -90,7 +95,7 @@ const App: React.FC = () => {
                 <div className={switchContainerClasses}>
                     <SwitchLabel title='... harvest mode' className='flex justify-center items-center' active={mode === 'harvest'}>
                         <Switch
-                            disabled={!account}
+                            disabled={!user.account}
                             checked={mode === 'harvest'}
                             onChange={handleSwitchChange}
                             checkedIcon={false}

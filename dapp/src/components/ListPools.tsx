@@ -1,6 +1,6 @@
 
 import styled from "styled-components";
-import useAccount from "../account/useAccount";
+import useUser from "../account/useUser";
 import { useAllPoolsBaseInfo } from "../pools/useAllPoolsBaseInfo"
 import { NetworkIcon } from "./NetworkIcon";
 import { PoolItemWrapper } from "./PoolItemWrapper";
@@ -8,7 +8,6 @@ import { PoolItemWrapper } from "./PoolItemWrapper";
 export type ListPoolsProps = {
     mode: 'basic' | 'harvest';
 }
-
 
 type ContainerProps = {
     wrongNetwork: boolean;
@@ -43,11 +42,9 @@ color: white;
 
 export const ListPools: React.FC<ListPoolsProps> = (props) => {
     const allPools = useAllPoolsBaseInfo();
-    const account = useAccount();
+    const user = useUser();
 
-    console.log('ACC', account);
-
-    const wrongNetwork = !!account && ![250, 4002].includes(account.network.networkId);
+    const wrongNetwork = !!user.account && ![250, 4002].includes(user.account.network.networkId);
 
     return (
         <div className="relative">

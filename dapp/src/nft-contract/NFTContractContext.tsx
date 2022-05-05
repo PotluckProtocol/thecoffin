@@ -1,9 +1,7 @@
+import { ethers, providers } from "ethers";
 import { uniq } from "lodash";
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
-import Web3 from "web3";
-import useAccount from "../account/useAccount";
-import { PoolBaseInfo } from "../pools/PoolBaseInfo";
-import { Web3Context } from "../web3/Web3Context";
+import useUser from "../account/useUser";
 import { abi } from "./abi";
 import { NFTContractWrapper } from "./NFTContractWrapper";
 
@@ -34,9 +32,6 @@ export type NFTContractContextType = {
 export const NFTContractContext = createContext<NFTContractContextType>(null as any);
 
 export const NFTContractProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
-
-    const account = useAccount();
-    const web3Context = useContext(Web3Context);
     const [wrapper, setWrapper] = useState<NFTContractWrapper | null>(null)
     const [networkId, setNetworkId] = useState<number>();
     const [poolContractAddress, setPoolContractAddress] = useState<string>('');
@@ -49,28 +44,17 @@ export const NFTContractProvider: React.FC<PropsWithChildren<{}>> = ({ children 
     const [walletTokenIds, setWalletTokenIds] = useState<number[]>([]);
     const [walletTokenIdsInited, setWalletTokenIdsInited] = useState<boolean>(false);
     const [maxSupply, setMaxSupply] = useState<number>(0);
+    const user = useUser();
 
-    const walletAddress = account?.walletAddress;
+    const walletAddress = user.account?.walletAddress;
 
     useEffect(() => {
-
-
         if (isInitialized && walletAddress && nftContractAddress && networkId) {
-            let web3: Web3;
-
-
-            if (account && account.network.networkId === networkId) {
-                console.log('NFT Web3: Account');
-                web3 = account.web3;
-            } else {
-                console.log('Web3: Public')
-                web3 = web3Context.getWeb3(networkId).web3;
-            }
-            const contract = new web3.eth.Contract(abi, nftContractAddress);
+            const contract = new ethers.Contract(nftContractAddress, abi, user.getSignerOrProvider(networkId));
             const wrapper = new NFTContractWrapper(contract);
             setWrapper(wrapper);
         }
-    }, [isInitialized, walletAddress]);
+    }, [isInitialized, user, nftContractAddress, networkId]);
 
 
     useEffect(() => {
@@ -100,16 +84,7 @@ export const NFTContractProvider: React.FC<PropsWithChildren<{}>> = ({ children 
     const init = async (props: InitProps): Promise<void> => {
         const { contractAddress, networkId, poolContractAddress } = props;
 
-        let web3: Web3;
-        if (account && account.network.networkId === networkId) {
-            console.log('NFT Web3: Account');
-            web3 = account.web3;
-        } else {
-            console.log('Web3: Public')
-            web3 = web3Context.getWeb3(networkId).web3;
-        }
-
-        const contract = new web3.eth.Contract(abi, contractAddress);
+        const contract = new ethers.Contract(contractAddress, abi, user.getSignerOrProvider(networkId));
         const wrapper = new NFTContractWrapper(contract);
 
         const [maxSupply] = await Promise.all([

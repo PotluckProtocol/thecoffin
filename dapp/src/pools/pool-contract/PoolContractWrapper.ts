@@ -1,5 +1,5 @@
+import { ethers } from "ethers";
 import EventEmitter from "events";
-import { Contract } from "../../types/Contract";
 
 export type Opts = {
     stakeGas?: number;
@@ -10,14 +10,14 @@ export type Opts = {
 export class PoolContractWrapper extends EventEmitter {
 
     constructor(
-        private contract: Contract,
+        private contract: ethers.Contract,
         private opts: Opts = {}
     ) {
         super();
     }
 
     public async isActive(): Promise<boolean> {
-        const res = await this.contract.methods.paused().call();
+        const res = await this.contract.paused();
         return Boolean(res);
     }
 
@@ -32,54 +32,43 @@ export class PoolContractWrapper extends EventEmitter {
     }
 
     public async getEarned(wallet: string): Promise<string> {
-        const earned = await this.contract.methods.getRewardsEarnedForWallet(wallet).call();
+        const earned = await this.contract.getRewardsEarnedForWallet(wallet);
         return earned;
     }
 
     public async getTokensPerBlock(): Promise<string> {
-        const balance = await this.contract.methods.tokensPerBlock().call();
+        const balance = await this.contract.tokensPerBlock();
         return balance;
     }
 
     public async isPaused(): Promise<boolean> {
-        return this.contract.methods.paused().call();
+        return this.contract.paused();
     }
 
     public async harvest(toWallet: string, tokenIds: number[]): Promise<void> {
-        await this.contract.methods
-            .harvestMultiple(tokenIds)
-            .send({
-                from: toWallet,
-                to: this.contract.options.address
-            });
+        await this.waitForTx(this.contract.harvestMultiple(tokenIds));
     }
 
     public async stakeNfts(fromWallet: string, tokenIds: number[]): Promise<void> {
-        await this.contract.methods
-            .stakeNFTS(tokenIds)
-            .send({
-                from: fromWallet,
-                to: this.contract.options.address
-            });
+        await this.waitForTx(this.contract.stakeNFTS(tokenIds));
     }
 
     public async getTotalStakedCount(): Promise<number> {
-        const count = await this.contract.methods.totalStaked().call();
+        const count = await this.contract.totalStaked();
         return Number(count);
     }
 
     public async unStakeNfts(fromWallet: string, tokenIds: number[]): Promise<void> {
-        await this.contract.methods
-            .unStakeNFTS(tokenIds)
-            .send({
-                from: fromWallet,
-                to: this.contract.options.address
-            });
+        await this.waitForTx(this.contract.unStakeNFTS(tokenIds));
     }
 
-
     private async getTokenIdsInternal(wallet: string): Promise<string[]> {
-        return this.contract.methods.getOwnedTokenIds(wallet).call();
+        return this.contract.getOwnedTokenIds(wallet);
+    }
+
+    private async waitForTx(promise: Promise<any>) {
+        const tx = await promise;
+        await tx.wait();
     }
 
 }

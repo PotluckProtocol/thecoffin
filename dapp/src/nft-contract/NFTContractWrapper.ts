@@ -1,10 +1,10 @@
+import { ethers } from "ethers";
 import EventEmitter from "events";
-import { Contract } from "../types/Contract";
 
 export class NFTContractWrapper extends EventEmitter {
 
     constructor(
-        private contract: Contract
+        private contract: ethers.Contract
     ) {
         super();
     }
@@ -14,22 +14,17 @@ export class NFTContractWrapper extends EventEmitter {
             return false;
         }
 
-        const approved = await this.contract.methods.isApprovedForAll(wallet, operator).call();
+        const approved = await this.contract.isApprovedForAll(wallet, operator);
         return Boolean(approved);
     }
 
     public async approve(wallet: string, operator: string): Promise<void> {
-        await this.contract.methods
-            .setApprovalForAll(operator, true)
-            .send({
-                gasLimit: String(75000),
-                from: wallet,
-                to: this.contract.options.address
-            });
+        const tx = await this.contract.setApprovalForAll(operator, true);
+        await tx.wait();
     }
 
     public async getBalance(wallet: string): Promise<number> {
-        const balance = await this.contract.methods.balanceOf(wallet).call();
+        const balance = await this.contract.balanceOf(wallet);
         return Number(balance);
     }
 
@@ -38,7 +33,7 @@ export class NFTContractWrapper extends EventEmitter {
 
         const tokenIds: number[] = [];
         for (let i = 0; i < balance; i++) {
-            const tokenId = await this.contract.methods.tokenOfOwnerByIndex(wallet, i).call();
+            const tokenId = await this.contract.tokenOfOwnerByIndex(wallet, i);
             tokenIds.push(Number(tokenId));
         }
 
@@ -46,7 +41,7 @@ export class NFTContractWrapper extends EventEmitter {
     }
 
     public async getMaxSupply(): Promise<number> {
-        const maxSupply = await this.contract.methods.maxSupply().call();
+        const maxSupply = await this.contract.maxSupply();
         return Number(maxSupply);
     }
 

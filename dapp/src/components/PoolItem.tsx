@@ -1,7 +1,7 @@
 import { ComponentPropsWithoutRef, ReactNode, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import moment from 'moment';
-import useAccount from "../account/useAccount";
+import useUser from "../account/useUser";
 import { NFTContractContext } from "../nft-contract/NFTContractContext";
 import { PoolContractContext } from "../pools/pool-contract/PoolContractContext";
 import { PoolBaseInfo } from "../pools/PoolBaseInfo"
@@ -166,22 +166,25 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     baseInfo,
     mode: rawMode
 }) => {
-    const account = useAccount();
+    const user = useUser();
     const nftContractContext = useContext(NFTContractContext);
     const poolContractContext = useContext(PoolContractContext);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-    const isConnected = !!account;
+    const isConnected = !!user.account;
 
     useEffect(() => {
         const init = async () => {
             poolContractContext.init(baseInfo);
-
-            await nftContractContext.init({
-                contractAddress: baseInfo.nftContractAddress,
-                networkId: baseInfo.networkId,
-                poolContractAddress: baseInfo.poolContractAddress
-            });
+            try {
+                await nftContractContext.init({
+                    contractAddress: baseInfo.nftContractAddress,
+                    networkId: baseInfo.networkId,
+                    poolContractAddress: baseInfo.poolContractAddress
+                });
+            } catch (e) {
+                console.log('Init failed', e);
+            }
         }
 
         init();
@@ -313,7 +316,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     let buttonVisible: boolean = true;
     let buttonDisabled: boolean = false;
     let buttonText: string = 'Open';
-    if (!account || poolContractContext.poolState === 'NotStarted') {
+    if (!user.account || poolContractContext.poolState === 'NotStarted') {
         buttonVisible = false;
     } else if (mode === 'harvest') {
         buttonText = poolContractContext.isHarvesting ? 'RAIDING...' : 'RAID';

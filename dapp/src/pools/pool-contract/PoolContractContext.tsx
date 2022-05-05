@@ -1,9 +1,8 @@
+import { ethers } from "ethers";
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
-import Web3 from "web3";
-import useAccount from "../../account/useAccount";
+import useUser from "../../account/useUser";
 import useInterval from "../../hooks/useInterval";
 import { weiToNumeric } from "../../utils/weiToNumeric";
-import { Web3Context } from "../../web3/Web3Context";
 import { PoolBaseInfo } from "../PoolBaseInfo";
 import { abi } from "./abi";
 import { PoolContractWrapper } from "./PoolContractWrapper";
@@ -46,28 +45,17 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
     const [blockRewardPerStakedNft, setBlockRewardPerStakedNft] = useState(0);
     const [totalEarned, setTotalEarned] = useState<null | number>(null);
     const [isCountingEarnedTotal, setIsCountingEarnedTotal] = useState(false);
-    const account = useAccount();
-    const walletAddress = account?.walletAddress;
-    const web3Context = useContext(Web3Context);
+    const user = useUser();
+    const walletAddress = user.account?.walletAddress;
 
     useEffect(() => {
         if (isInitialized && poolBaseInfo) {
-            let web3: Web3;
-            console.log('EFF');
-            console.log(account, poolBaseInfo)
-            if (account && account.network.networkId === poolBaseInfo.networkId) {
-                console.log('Web3: Account');
-                web3 = account.web3;
-            } else {
-                console.log('Web3: Public')
-                web3 = web3Context.getWeb3(poolBaseInfo.networkId).web3;
-            }
-            const contract = new web3.eth.Contract(abi, poolBaseInfo.poolContractAddress);
+            const contract = new ethers.Contract(poolBaseInfo.poolContractAddress, abi, user.getSignerOrProvider(poolBaseInfo.networkId));
             const wrapper = new PoolContractWrapper(contract);
             setWrapper(wrapper);
             intervalBeat(wrapper);
         }
-    }, [isInitialized, walletAddress]);
+    }, [isInitialized, user, poolBaseInfo]);
 
     async function intervalBeat(wrapper: PoolContractWrapper, walletAddress?: string): Promise<void> {
         const promises: [Promise<string>, Promise<boolean>, Promise<number>, Promise<string>?] = [
@@ -109,15 +97,9 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
     }, 5000);
 
     async function init(poolBaseInfo: PoolBaseInfo): Promise<void> {
-        let web3: Web3;
-        if (account && account.network.networkId === poolBaseInfo.networkId) {
-            web3 = account.web3;
-        } else {
-            web3 = web3Context.getWeb3(poolBaseInfo.networkId).web3;
-        }
-        const contract = new web3.eth.Contract(abi, poolBaseInfo.poolContractAddress);
-        const wrapper = new PoolContractWrapper(contract);
         try {
+            const contract = new ethers.Contract(poolBaseInfo.poolContractAddress, abi, user.getSignerOrProvider(poolBaseInfo.networkId));
+            const wrapper = new PoolContractWrapper(contract);
             await intervalBeat(wrapper);
 
             setWrapper(wrapper);

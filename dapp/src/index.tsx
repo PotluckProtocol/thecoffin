@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { AccountProvider } from './account/AccountContext';
 import { PoolsBaseInfoProvider } from "./pools/PoolsBaseInfoContext";
-import { Web3Provider } from './web3/Web3Context';
-import { TerminologyProvider } from './terminology/terminology';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -25,15 +23,11 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Web3Provider>
-                <AccountProvider>
-                    <TerminologyProvider>
-                        <PoolsBaseInfoProvider>
-                            <App />
-                        </PoolsBaseInfoProvider>
-                    </TerminologyProvider>
-                </AccountProvider>
-            </Web3Provider>
+            <AccountProvider>
+                <PoolsBaseInfoProvider>
+                    <App />
+                </PoolsBaseInfoProvider>
+            </AccountProvider>
         </ErrorBoundary>
     </React.StrictMode >
 );
