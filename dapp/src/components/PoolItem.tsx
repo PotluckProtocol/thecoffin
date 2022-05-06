@@ -291,7 +291,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
                         />
                         <SimpleItemPair
                             className="mb-1"
-                            label='Pool est. remaining'
+                            label='Days remaining est.'
                             value={daysRemaining?.toString() || ''}
                             subValue={'Days'}
                         />
@@ -307,7 +307,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
                 <EarnedSymbol>{baseInfo.rewardTokenSymbol}</EarnedSymbol>
                 <SimpleItemPair
                     className="mt-2"
-                    label='Pool est. remaining'
+                    label='Days remaining est.'
                     value={daysRemaining?.toString() || ''}
                     subValue={'Days'}
                 />
