@@ -13,6 +13,7 @@ import { Loading } from "./Loading";
 import { toast } from "react-toastify";
 import { NetworkIcon } from "./NetworkIcon";
 import classNames from "classnames";
+import { useDaysRemaining } from "../hooks/useDaysRemaining";
 
 export type PoolItemProps = {
     className?: string;
@@ -169,6 +170,10 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     const user = useUser();
     const nftContractContext = useContext(NFTContractContext);
     const poolContractContext = useContext(PoolContractContext);
+    const daysRemaining = useDaysRemaining({
+        toBlock: poolContractContext.blockRewardsEndsInBlock,
+        networkId: baseInfo.networkId
+    })
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const isConnected = !!user.account;
@@ -214,7 +219,6 @@ export const PoolItem: React.FC<PoolItemProps> = ({
             countDailyBlockReward(poolContractContext.blockRewardPerStakedNft, poolContractContext.walletTokenIds.length || 1)
         );
     }
-    const poolEndStr = moment(baseInfo.endDateTime).utc().format('MMMM Do');
 
     const active = rawMode === 'basic' || poolContractContext.walletTokenIds.length > 0;
     const mode = active ? rawMode : 'basic';
@@ -265,12 +269,12 @@ export const PoolItem: React.FC<PoolItemProps> = ({
                             label='Your stake'
                             value={`${poolContractContext.walletTokenIds.length}/${poolContractContext.totalStaked}`}
                         />
-                        {/*      <SimpleItemPair
+                        <SimpleItemPair
                             className="mb-1"
-                            label='Pool ends on'
-                            value={poolEndStr}
+                            label='Days remaining est.'
+                            value={daysRemaining?.toString() || ''}
+                            subValue={'Days'}
                         />
-                */}
                     </>
                 ) : (
                     <>
@@ -285,13 +289,12 @@ export const PoolItem: React.FC<PoolItemProps> = ({
                             label='Total staked'
                             value={`${poolContractContext.totalStaked}`}
                         />
-                        {/*   
                         <SimpleItemPair
                             className="mb-1"
-                            label='Pool ends on'
-                            value={poolEndStr}
+                            label='Pool est. remaining'
+                            value={daysRemaining?.toString() || ''}
+                            subValue={'Days'}
                         />
-                         */}
                     </>
                 )}
             </InfoContainer>
@@ -302,13 +305,12 @@ export const PoolItem: React.FC<PoolItemProps> = ({
                 <EarnedLabel >Total earned</EarnedLabel>
                 <EarnedAmount>{earned || 0}</EarnedAmount>
                 <EarnedSymbol>{baseInfo.rewardTokenSymbol}</EarnedSymbol>
-                {/*  
                 <SimpleItemPair
-                    className="mt-3"
-                    label='Pool ends on'
-                    value={poolEndStr}
+                    className="mt-2"
+                    label='Pool est. remaining'
+                    value={daysRemaining?.toString() || ''}
+                    subValue={'Days'}
                 />
-                 */}
             </HarvestContainer>
         );
     }

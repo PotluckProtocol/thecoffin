@@ -61,8 +61,7 @@ const CaveCompounder = styled.div`
 `;
 
 const CaveCompounderImage = styled.img`
-
-transition: filter 500ms ease-in-out;
+    transition: filter 500ms ease-in-out;
 
     &:hover {
         filter: invert(79%) sepia(22%) saturate(2204%) hue-rotate(224deg) brightness(99%) contrast(69%)
@@ -122,7 +121,6 @@ const App: React.FC = () => {
                 </div>
 
                 <ListPools mode={mode} />
-
 
                 <CaveCompounder className="block mb-6 mt-12 px-6 md:flex justify-center items-center">
                     <div className='md:mr-4 mb-4 md:mb-0 text-center'>Autocompound your rewards in </div>

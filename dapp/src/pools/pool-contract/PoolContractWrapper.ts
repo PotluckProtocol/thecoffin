@@ -41,6 +41,11 @@ export class PoolContractWrapper extends EventEmitter {
         return balance;
     }
 
+    public async getRewardsEndInBlock(): Promise<number> {
+        const blockNum = await this.contract.rewardsEndBlock();
+        return Number(blockNum);
+    }
+
     public async isPaused(): Promise<boolean> {
         return this.contract.paused();
     }

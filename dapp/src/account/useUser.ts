@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, providers } from "ethers";
 import { useContext, useEffect, useState } from "react";
 import { Account } from "./Account";
 import { AccountContext } from "./AccountContext";
@@ -28,6 +28,7 @@ export type User = {
     account: Account | null;
     isInitialized: boolean;
     getSignerOrProvider(networkId: number): ProviderOrSigner;
+    getProvider(networkId: number): providers.Provider;
 }
 
 const useUser = (): User => {
@@ -45,17 +46,23 @@ const useUser = (): User => {
         }
     }
 
+    const getProvider = (networkId: number) => {
+        console.log('No account found, using public provider');
+        return PUBLIC_PROVIDER_MAP[networkId].web3;
+    }
+
     const [user, setUser] = useState<User>({
         account: null,
         isInitialized,
-        getSignerOrProvider
+        getSignerOrProvider,
+        getProvider
     });
 
     const walletAddress = account?.walletAddress;
     const networkId = account?.network.networkId;
 
     useEffect(() => {
-        setUser({ account, getSignerOrProvider, isInitialized });
+        setUser({ account, getSignerOrProvider, getProvider, isInitialized });
     }, [walletAddress, networkId, isInitialized]);
 
     return user;

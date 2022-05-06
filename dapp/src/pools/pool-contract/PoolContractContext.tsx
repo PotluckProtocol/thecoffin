@@ -19,6 +19,7 @@ export type PoolContractContextType = {
     poolState: PoolState;
     isCountingEarnedTotal: boolean;
     blockRewardPerStakedNft: number;
+    blockRewardsEndsInBlock: number;
     totalStaked: number;
     isHarvesting: boolean;
     harvest(): Promise<void>;
@@ -43,6 +44,7 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
     const [totalStaked, setTotalStaked] = useState(0);
     const [poolState, setPoolState] = useState<PoolState>('NotResolved');
     const [blockRewardPerStakedNft, setBlockRewardPerStakedNft] = useState(0);
+    const [blockRewardsEndsInBlock, setBlockRewardsEndsInBlock] = useState(0);
     const [totalEarned, setTotalEarned] = useState<null | number>(null);
     const [isCountingEarnedTotal, setIsCountingEarnedTotal] = useState(false);
     const user = useUser();
@@ -102,7 +104,10 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
             const wrapper = new PoolContractWrapper(contract);
             await intervalBeat(wrapper);
 
+            const rewardsEndInBlock = await wrapper.getRewardsEndInBlock();
+
             setWrapper(wrapper);
+            setBlockRewardsEndsInBlock(rewardsEndInBlock);
             setPoolBaseInfo(poolBaseInfo);
             setIsInitialized(true);
         } catch (e) {
@@ -167,6 +172,7 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
         isUnstaking,
         totalEarned,
         blockRewardPerStakedNft,
+        blockRewardsEndsInBlock,
         totalStaked,
         isCountingEarnedTotal,
         isHarvesting,
