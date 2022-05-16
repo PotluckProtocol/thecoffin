@@ -40,9 +40,4 @@ export class NFTContractWrapper extends EventEmitter {
         return tokenIds;
     }
 
-    public async getMaxSupply(): Promise<number> {
-        const maxSupply = await this.contract.maxSupply();
-        return Number(maxSupply);
-    }
-
 }

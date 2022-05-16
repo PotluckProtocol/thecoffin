@@ -1,5 +1,14 @@
 [
     {
+        "name": "One Ring",
+        "coverImage": "/images/pools/ring/cover.jpg",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x4425E7B113AaecC1C928c7A2195d4A772768D47F",
+        "nftContractAddress": "0xDf7834cEaDCB94Ef67fBE52BA8ce4c6B2ee12bCc",
+        "networkId": 250,
+        "endDateTime": "2022-06-02T22:00:00.000Z"
+    },
+    {
         "name": "Creatures of the Cave",
         "coverImage": "/images/pools/cotc/cover.png",
         "poolContractAddress": "0xC802848D899b8c2ed1298570D1e0004D284035b4",

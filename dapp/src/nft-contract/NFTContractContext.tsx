@@ -19,7 +19,6 @@ export type NFTContractContextType = {
     addTokenIdsOnSession(tokenIds: number[]): void;
     isInitialized: boolean;
     isWalletConnected: boolean;
-    maxSupply: number;
 
     walletBalance: number;
     walletTokenIdsInited: boolean;
@@ -43,7 +42,6 @@ export const NFTContractProvider: React.FC<PropsWithChildren<{}>> = ({ children 
     const [walletBalance, setWalletBalance] = useState(0);
     const [walletTokenIds, setWalletTokenIds] = useState<number[]>([]);
     const [walletTokenIdsInited, setWalletTokenIdsInited] = useState<boolean>(false);
-    const [maxSupply, setMaxSupply] = useState<number>(0);
     const user = useUser();
 
     const walletAddress = user.account?.walletAddress;
@@ -82,23 +80,21 @@ export const NFTContractProvider: React.FC<PropsWithChildren<{}>> = ({ children 
     }, [wrapper, walletAddress])
 
     const init = async (props: InitProps): Promise<void> => {
-        const { contractAddress, networkId, poolContractAddress } = props;
+        try {
+            const { contractAddress, networkId, poolContractAddress } = props;
 
-        const contract = new ethers.Contract(contractAddress, abi, user.getSignerOrProvider(networkId));
-        const wrapper = new NFTContractWrapper(contract);
+            const contract = new ethers.Contract(contractAddress, abi, user.getSignerOrProvider(networkId));
+            const wrapper = new NFTContractWrapper(contract);
 
-        const [maxSupply] = await Promise.all([
-            wrapper.getMaxSupply()
-        ]);
-
-        setMaxSupply(maxSupply);
-        setWrapper(wrapper);
-        setPoolContractAddress(poolContractAddress);
-        setNftContractAddress(contractAddress);
-        setNetworkId(networkId);
-        setIsInitialized(true);
+            setWrapper(wrapper);
+            setPoolContractAddress(poolContractAddress);
+            setNftContractAddress(contractAddress);
+            setNetworkId(networkId);
+            setIsInitialized(true);
+        } catch (e) {
+            console.log('Error on initializing NFT contract', e);
+        }
     }
-
     const approve = async (): Promise<void> => {
         if (isInitialized && walletAddress && wrapper) {
             setIsApproving(true);
@@ -145,7 +141,6 @@ export const NFTContractProvider: React.FC<PropsWithChildren<{}>> = ({ children 
         addTokenIdsOnSession,
 
         isInitialized,
-        maxSupply,
 
         isWalletConnected,
         walletBalance,
