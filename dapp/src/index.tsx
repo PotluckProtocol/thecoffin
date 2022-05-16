@@ -6,6 +6,7 @@ import { PoolsBaseInfoProvider } from "./pools/PoolsBaseInfoContext";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CaveCompounderProvider } from './components/CaveCompounderToolkit/context/caveCompounderContext';
 
 const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
     return (
@@ -25,7 +26,9 @@ root.render(
         <ErrorBoundary FallbackComponent={ErrorFallback}>
             <AccountProvider>
                 <PoolsBaseInfoProvider>
-                    <App />
+                    <CaveCompounderProvider>
+                        <App />
+                    </CaveCompounderProvider>
                 </PoolsBaseInfoProvider>
             </AccountProvider>
         </ErrorBoundary>

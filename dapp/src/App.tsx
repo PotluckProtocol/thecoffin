@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, useEffect, useState } from 'react';
+import React, { ComponentPropsWithoutRef, useContext, useEffect, useState } from 'react';
 import Switch from 'react-switch';
 import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
@@ -7,7 +7,9 @@ import { Navbar } from './components/Navbar';
 import 'react-toastify/dist/ReactToastify.css';
 import classNames from 'classnames';
 import useUser from './account/useUser';
-import { Loading } from './components/Loading';
+import { Loading } from './components/Loading'
+import { CaveCompounderToolkit } from './components/CaveCompounderToolkit';
+import { CaveCompounderContext } from './components/CaveCompounderToolkit/context/caveCompounderContext';
 
 const Container = styled.div`
     max-width: 1200px;
@@ -60,23 +62,31 @@ const CaveCompounder = styled.div`
     font-size: 1.2rem;
 `;
 
-const CaveCompounderImage = styled.img`
-    transition: filter 500ms ease-in-out;
-
-    &:hover {
-        filter: invert(79%) sepia(22%) saturate(2204%) hue-rotate(224deg) brightness(99%) contrast(69%)
-    }
+const CaveCompounderContainer = styled.div`
+    margin-bottom: 8rem;
 `;
 
 const Quu = styled.span`
     font-size: 0;
 `;
 
-
 const App: React.FC = () => {
 
+    const caveCompounderContext = useContext(CaveCompounderContext);
     const user = useUser();
     const [mode, setMode] = useState<'basic' | 'harvest'>('basic')
+
+    useEffect(() => {
+        if (user.account) {
+            try {
+                caveCompounderContext.init();
+            } catch (e) {
+                console.log('CaveCompounder init failed', e);
+            }
+        } else {
+            caveCompounderContext.reset();
+        }
+    }, [user.account]);
 
     const handleSwitchChange = (checked: boolean) => {
         if (checked) {
@@ -91,7 +101,11 @@ const App: React.FC = () => {
     });
 
     if (!user.isInitialized) {
-        return null;
+        return (
+            <div className="mt-12 flex justify-center ">
+                <Loading size={15} width={150} />
+            </div>
+        );
     }
 
     return (
@@ -122,10 +136,11 @@ const App: React.FC = () => {
 
                 <ListPools mode={mode} />
 
-                <CaveCompounder className="block mb-6 mt-12 px-6 md:flex justify-center items-center">
-                    <div className='md:mr-4 mb-4 md:mb-0 text-center'>Autocompound your rewards in </div>
-                    <a href="https://thecavecompounder.com"><CaveCompounderImage className='mx-auto md:mx-0' src="/images/CaveCompounder.png" /></a>
-                </CaveCompounder>
+                {user.account && caveCompounderContext.isInitialized && (
+                    <CaveCompounderContainer>
+                        <CaveCompounderToolkit />
+                    </CaveCompounderContainer>
+                )}
             </Container >
             <ToastContainer />
 

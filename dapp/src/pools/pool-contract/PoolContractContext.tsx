@@ -1,6 +1,7 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 import useUser from "../../account/useUser";
+import { CaveCompounderContext } from "../../components/CaveCompounderToolkit/context/caveCompounderContext";
 import useInterval from "../../hooks/useInterval";
 import { weiToNumeric } from "../../utils/weiToNumeric";
 import { PoolBaseInfo } from "../PoolBaseInfo";
@@ -33,6 +34,7 @@ export type PoolContractContextType = {
 export const PoolContractContext = createContext<PoolContractContextType>(null as any);
 
 export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+    const caveCompounderContext = useContext(CaveCompounderContext);
     const [poolBaseInfo, setPoolBaseInfo] = useState<PoolBaseInfo>();
     const [isInitialized, setIsInitialized] = useState(false);
     const [wrapper, setWrapper] = useState<PoolContractWrapper>();
@@ -58,6 +60,10 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
             intervalBeat(wrapper);
         }
     }, [isInitialized, user, poolBaseInfo]);
+
+    const _notifyCaveCompounderToolkit = () => {
+        caveCompounderContext.retrieveAndWaitForNewBalance(BigNumber.from(caveCompounderContext.lpBalance));
+    }
 
     async function intervalBeat(wrapper: PoolContractWrapper, walletAddress?: string): Promise<void> {
         const promises: [Promise<string>, Promise<boolean>, Promise<number>, Promise<string>?] = [
@@ -146,6 +152,7 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
             try {
                 await wrapper.unStakeNfts(walletAddress, tokenIds);
                 setWalletTokenIds(walletTokenIds.filter(id => !tokenIds.includes(id)));
+                _notifyCaveCompounderToolkit();
             } finally {
                 setIsUnstaking(false);
             }
@@ -158,6 +165,7 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
             try {
                 const tokenIds = await wrapper.getTokenIds(walletAddress);
                 await wrapper.harvest(walletAddress, tokenIds);
+                _notifyCaveCompounderToolkit();
             } finally {
                 setIsHarvesting(false);
             }
