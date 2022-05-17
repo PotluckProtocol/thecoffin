@@ -80,7 +80,6 @@ const CoverImageContainer = styled.div`
 `;
 
 const CoverImage = styled.img`
-    aspect-ratio: 1/1;
     border-radius: 1rem;
     box-shadow: rgb(111, 4, 180) 1px 1px 18px 1px
 `;

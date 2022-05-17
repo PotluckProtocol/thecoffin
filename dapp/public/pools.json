@@ -1,7 +1,7 @@
 [
     {
-        "name": "One Ring",
-        "coverImage": "/images/pools/ring/cover.jpg",
+        "name": "The Precious",
+        "coverImage": "/images/pools/ring/cover2.jpg",
         "rewardTokenSymbol": "FANG-FTM LP",
         "poolContractAddress": "0x4425E7B113AaecC1C928c7A2195d4A772768D47F",
         "nftContractAddress": "0xDf7834cEaDCB94Ef67fBE52BA8ce4c6B2ee12bCc",
