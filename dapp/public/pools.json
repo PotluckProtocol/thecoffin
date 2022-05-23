@@ -1,5 +1,23 @@
 [
     {
+        "name": "Nekro Demonz",
+        "coverImage": "/images/pools/nekrodemonz/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x0c1559A1d2A1682caE7401C95e17784C5693726f",
+        "nftContractAddress": "0x0c60C064fd949E6CEAA0ef9F7E4511fe70eb4189",
+        "networkId": 250,
+        "endDateTime": "2022-06-02T22:00:00.000Z"
+    },
+    {
+        "name": "Hunters of Evil",
+        "coverImage": "/images/pools/huntersofevil/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x4bd90A1c1Cf6Ce0D11583A71c653ECb86AA5feE3",
+        "nftContractAddress": "0xD813DA9995C753145927e25b8ecc18E6bF2b6AE0",
+        "networkId": 250,
+        "endDateTime": "2022-06-02T22:00:00.000Z"
+    },
+    {
         "name": "The Precious",
         "coverImage": "/images/pools/ring/cover2.jpg",
         "rewardTokenSymbol": "FANG-FTM LP",
