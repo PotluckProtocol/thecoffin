@@ -1,12 +1,19 @@
 [
     {
+        "name": "Cyberfantomic",
+        "coverImage": "/images/pools/cyberfantomic/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x4EA7aB60a1e761a85860B24363A258f9Ac56af34",
+        "nftContractAddress": "0x5612f86D1c0Cf420B8217f08d55dB209311A7948",
+        "networkId": 250
+    },
+    {
         "name": "Nekro Demonz",
         "coverImage": "/images/pools/nekrodemonz/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
         "poolContractAddress": "0x0c1559A1d2A1682caE7401C95e17784C5693726f",
         "nftContractAddress": "0x0c60C064fd949E6CEAA0ef9F7E4511fe70eb4189",
-        "networkId": 250,
-        "endDateTime": "2022-06-02T22:00:00.000Z"
+        "networkId": 250
     },
     {
         "name": "Hunters of Evil",
@@ -14,8 +21,7 @@
         "rewardTokenSymbol": "FANG-FTM LP",
         "poolContractAddress": "0x4bd90A1c1Cf6Ce0D11583A71c653ECb86AA5feE3",
         "nftContractAddress": "0xD813DA9995C753145927e25b8ecc18E6bF2b6AE0",
-        "networkId": 250,
-        "endDateTime": "2022-06-02T22:00:00.000Z"
+        "networkId": 250
     },
     {
         "name": "The Precious",
@@ -23,8 +29,7 @@
         "rewardTokenSymbol": "FANG-FTM LP",
         "poolContractAddress": "0x4425E7B113AaecC1C928c7A2195d4A772768D47F",
         "nftContractAddress": "0xDf7834cEaDCB94Ef67fBE52BA8ce4c6B2ee12bCc",
-        "networkId": 250,
-        "endDateTime": "2022-06-02T22:00:00.000Z"
+        "networkId": 250
     },
     {
         "name": "Creatures of the Cave",
@@ -32,8 +37,7 @@
         "poolContractAddress": "0xC802848D899b8c2ed1298570D1e0004D284035b4",
         "rewardTokenSymbol": "FANG-FTM LP",
         "nftContractAddress": "0xDAC2031173c07BD622759051Df373b708A1acbcE",
-        "networkId": 250,
-        "endDateTime": "2022-06-02T22:00:00.000Z"
+        "networkId": 250
     },
     {
         "name": "AcidCats",
@@ -41,8 +45,7 @@
         "poolContractAddress": "0x204C992D413a85E959e2E151E317e6367e1b2eA4",
         "rewardTokenSymbol": "FANG-FTM LP",
         "nftContractAddress": "0xa81c9D00D29Afdc83b7e788a29Ec96A5BD81A8EA",
-        "networkId": 250,
-        "endDateTime": "2022-06-02T22:00:00.000Z"
+        "networkId": 250
     },
     {
         "name": "Fantom Baby Punks",
@@ -50,8 +53,7 @@
         "poolContractAddress": "0xF6B171dF653C641d78fC77fA5706Cdf873541A1b",
         "rewardTokenSymbol": "FANG-FTM LP",
         "nftContractAddress": "0xDb8F58Ab15e967B7Dcc82D8907C2ed59d2ea9686",
-        "networkId": 250,
-        "endDateTime": "2022-07-02T22:00:00.000Z"
+        "networkId": 250
     },
     {
         "name": "Potluck Realm Orcs",
@@ -59,7 +61,6 @@
         "poolContractAddress": "0x466ED80284a05E5BB89e1bD83c53aa6083eBfc3c",
         "rewardTokenSymbol": "FANG-FTM LP",
         "nftContractAddress": "0xdC2BC583f45450e6Ae271C48C941b10e073380B5",
-        "networkId": 250,
-        "endDateTime": "2022-06-02T22:00:00.000Z"
+        "networkId": 250
     }
 ]
