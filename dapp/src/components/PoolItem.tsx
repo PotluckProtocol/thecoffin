@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { NetworkIcon } from "./NetworkIcon";
 import classNames from "classnames";
 import { useDaysRemaining } from "../hooks/useDaysRemaining";
+import { HarvestAllContext } from "../pools/HarvestAllContext";
 
 export type PoolItemProps = {
     className?: string;
@@ -170,6 +171,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     const user = useUser();
     const nftContractContext = useContext(NFTContractContext);
     const poolContractContext = useContext(PoolContractContext);
+    const harvestAllContext = useContext(HarvestAllContext);
     const daysRemaining = useDaysRemaining({
         toBlock: poolContractContext.blockRewardsEndsInBlock,
         networkId: baseInfo.networkId
@@ -195,6 +197,32 @@ export const PoolItem: React.FC<PoolItemProps> = ({
         init();
     }, []);
 
+    const hasStake = poolContractContext.walletTokenIds.length > 0;
+
+    //    const hasStake = !!poolContractContext.totalEarned;
+
+    useEffect(() => {
+
+        if (poolContractContext.isInitialized && poolContractContext.poolState === 'Active' && hasStake) {
+            harvestAllContext.register(
+                baseInfo.poolContractAddress,
+                async () => {
+                    try {
+                        await poolContractContext.harvest();
+                        toast(`Successfully raided the ${baseInfo.name} grave`, { type: 'success', theme: 'colored' });
+                    } catch (e) {
+                        console.log('Harvesting failed', e);
+                        toast('Harvesting failed', { type: 'error', theme: 'colored' });
+                    }
+                }
+            );
+        }
+
+        return () => {
+            harvestAllContext.unregister(baseInfo.poolContractAddress);
+        }
+    }, [poolContractContext.isInitialized, poolContractContext.poolState, hasStake]);
+
     useEffect(() => {
         if (poolContractContext.isInitialized && isConnected) {
             poolContractContext.retrieveTokenIds();
@@ -211,7 +239,6 @@ export const PoolItem: React.FC<PoolItemProps> = ({
         earned = amountToString(poolContractContext.totalEarned);
     }
 
-    const hasStake = poolContractContext.walletTokenIds.length > 0;
 
     let dailyReward = 'TBA';
     if (poolContractContext.totalStaked > 0) {

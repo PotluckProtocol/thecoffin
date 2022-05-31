@@ -10,6 +10,7 @@ import useUser from './account/useUser';
 import { Loading } from './components/Loading'
 import { CaveCompounderToolkit } from './components/CaveCompounderToolkit';
 import { CaveCompounderContext } from './components/CaveCompounderToolkit/context/caveCompounderContext';
+import { HarvestAllProvider } from './pools/HarvestAllContext';
 
 const Container = styled.div`
     max-width: 1200px;
@@ -134,7 +135,9 @@ const App: React.FC = () => {
                     </SwitchLabel>
                 </div>
 
-                <ListPools mode={mode} />
+                <HarvestAllProvider>
+                    <ListPools mode={mode} />
+                </HarvestAllProvider>
 
                 {user.account && caveCompounderContext.isInitialized && (
                     <CaveCompounderContainer>
