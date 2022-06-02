@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 
 export type PoolPopupProps = {
     poolBaseInfo: PoolBaseInfo;
+    unstakeOnly?: boolean;
     onClose: () => void;
 }
 
@@ -104,7 +105,8 @@ const activeButtonStyle: CSSProperties = {
 
 export const PoolPopup: React.FC<PoolPopupProps> = ({
     poolBaseInfo,
-    onClose
+    onClose,
+    unstakeOnly
 }) => {
     const backdropRef = useRef(null);
     const nftContractContext = useContext(NFTContractContext);
@@ -112,7 +114,7 @@ export const PoolPopup: React.FC<PoolPopupProps> = ({
 
     const [isLoadingWalletTokens, setIsLoadingWalletTokens] = useState(false);
 
-    const [selectedView, setSelectedView] = useState<string>('stake');
+    const [selectedView, setSelectedView] = useState<string>(unstakeOnly ? 'unstake' : 'stake');
     const [selectedTokens, setSelectedTokens] = useState<number[]>([]);
 
     useEffect(() => {
@@ -162,7 +164,6 @@ export const PoolPopup: React.FC<PoolPopupProps> = ({
 
     let viewContent: ReactNode;
     if (selectedView === 'stake') {
-
         const handleStakeButtonClick = async () => {
             if (nftContractContext.walletIsApproved) {
                 try {
@@ -266,12 +267,15 @@ export const PoolPopup: React.FC<PoolPopupProps> = ({
                 </CloseButton>
                 <PoolName className="flex items-center justify-center mb-4" height={45}>{poolBaseInfo.name}</PoolName>
                 <Paragraph className="mb-2">Your intent?</Paragraph>
-                <ButtonGroup
-                    buttons={buttonGroupButtons}
-                    buttonStyle={buttonStyle}
-                    activeButtonStyle={activeButtonStyle}
-                    onSelect={handleSelectView}
-                />
+
+                {!unstakeOnly && (
+                    <ButtonGroup
+                        buttons={buttonGroupButtons}
+                        buttonStyle={buttonStyle}
+                        activeButtonStyle={activeButtonStyle}
+                        onSelect={handleSelectView}
+                    />
+                )}
 
                 {viewContent}
             </Container>

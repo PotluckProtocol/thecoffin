@@ -32,6 +32,20 @@ const Container = styled.div`
     }
 `;
 
+const defaultButtonStyle: CSSProperties = {
+    border: '2px solid #600f89',
+    padding: '.2rem 1rem',
+    fontWeight: 600,
+    fontSize: '1rem',
+    color: '#d5b9e6'
+}
+
+const defaultActiveButtonStyle: CSSProperties = {
+    background: 'linear-gradient(180deg, #d5b9e6 0%, #600f89 100%)',
+    backgroundColor: 'none',
+    color: "black"
+}
+
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({
     buttonStyle,
     activeButtonStyle,
@@ -39,16 +53,15 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
     buttons,
     onSelect
 }) => {
-
-    buttonStyle = buttonStyle || {};
-    activeButtonStyle = activeButtonStyle || {};
+    const mergedButtonStyle = { ...defaultButtonStyle, ...(buttonStyle || {}) };
+    const mergedActiveButtonStyle = { ...defaultActiveButtonStyle, ...(activeButtonStyle || {}) };
 
     return (
         <Container className={className}>
             {buttons.map(btn => {
                 const style: CSSProperties = {
-                    ...buttonStyle,
-                    ...(btn.active ? activeButtonStyle : {})
+                    ...mergedButtonStyle,
+                    ...(btn.active ? mergedActiveButtonStyle : {})
                 }
 
                 return (

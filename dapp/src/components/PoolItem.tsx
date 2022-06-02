@@ -19,7 +19,7 @@ import { HarvestAllContext } from "../pools/HarvestAllContext";
 export type PoolItemProps = {
     className?: string;
     baseInfo: PoolBaseInfo;
-    mode: 'basic' | 'harvest';
+    mode: 'basic' | 'harvest' | 'ended';
 }
 
 type ContainerProps = ComponentPropsWithoutRef<'div'> & {
@@ -280,7 +280,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
                 Patience...
             </PoolNotStartedText>
         )
-    } else if (mode === 'basic') {
+    } else if (['basic', 'ended'].includes(mode)) {
         content = (
             <InfoContainer className="mt-2">
                 {hasStake ? (
@@ -375,6 +375,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
             {isPopupOpen && (
                 <PoolPopup
                     poolBaseInfo={baseInfo}
+                    unstakeOnly={mode === 'ended'}
                     onClose={() => setIsPopupOpen(false)}
                 />
             )}

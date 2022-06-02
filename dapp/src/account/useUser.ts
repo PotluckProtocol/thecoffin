@@ -29,6 +29,7 @@ export type User = {
     isInitialized: boolean;
     getSignerOrProvider(networkId: number): ProviderOrSigner;
     getProvider(networkId: number): providers.Provider;
+    getCurrentBlock(networkId: number): Promise<number>;
 }
 
 const useUser = (): User => {
@@ -46,23 +47,30 @@ const useUser = (): User => {
         }
     }
 
-    const getProvider = (networkId: number) => {
+    const getProvider = (networkId: number): ethers.providers.Provider => {
         console.log('No account found, using public provider');
         return PUBLIC_PROVIDER_MAP[networkId].web3;
+    }
+
+    const getCurrentBlock = async (networkId: number): Promise<number> => {
+        const provider = getProvider(networkId);
+        const number = await provider.getBlockNumber();
+        return number;
     }
 
     const [user, setUser] = useState<User>({
         account: null,
         isInitialized,
         getSignerOrProvider,
-        getProvider
+        getProvider,
+        getCurrentBlock
     });
 
     const walletAddress = account?.walletAddress;
     const networkId = account?.network.networkId;
 
     useEffect(() => {
-        setUser({ account, getSignerOrProvider, getProvider, isInitialized });
+        setUser({ account, getSignerOrProvider, getProvider, getCurrentBlock, isInitialized });
     }, [walletAddress, networkId, isInitialized]);
 
     return user;

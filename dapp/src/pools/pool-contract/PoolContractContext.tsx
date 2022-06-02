@@ -8,7 +8,7 @@ import { PoolBaseInfo } from "../PoolBaseInfo";
 import { abi } from "./abi";
 import { PoolContractWrapper } from "./PoolContractWrapper";
 
-export type PoolState = 'NotResolved' | 'NotStarted' | 'Active';
+export type PoolState = 'NotResolved' | 'NotStarted' | 'Active' | 'Ended';
 
 export type PoolContractContextType = {
     isInitialized: boolean;
@@ -57,7 +57,7 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
             const contract = new ethers.Contract(poolBaseInfo.poolContractAddress, abi, user.getSignerOrProvider(poolBaseInfo.networkId));
             const wrapper = new PoolContractWrapper(contract);
             setWrapper(wrapper);
-            intervalBeat(wrapper);
+            intervalBeat(wrapper, blockRewardsEndsInBlock);
         }
     }, [isInitialized, user, poolBaseInfo]);
 
@@ -65,21 +65,39 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
         caveCompounderContext.retrieveAndWaitForNewBalance(BigNumber.from(caveCompounderContext.lpBalance));
     }
 
-    async function intervalBeat(wrapper: PoolContractWrapper, walletAddress?: string): Promise<void> {
-        const promises: [Promise<string>, Promise<boolean>, Promise<number>, Promise<string>?] = [
+    async function intervalBeat(
+        wrapper: PoolContractWrapper,
+        blockRewardsEndsInBlock: number,
+        walletAddress?: string
+    ): Promise<void> {
+
+        if (!poolBaseInfo) {
+            return;
+        }
+
+        const promises: [Promise<string>, Promise<boolean>, Promise<number>, Promise<number>, Promise<string>?] = [
             wrapper.getTokensPerBlock(),
             wrapper.isPaused(),
-            wrapper.getTotalStakedCount()
+            wrapper.getTotalStakedCount(),
+            user.getCurrentBlock(poolBaseInfo.networkId)
         ];
 
         if (walletAddress) {
             promises.push(wrapper.getEarned(walletAddress))
         }
 
-        const [tokensPerBlock, paused, stakedCount, totalEarned] = await Promise.all(promises);
+        const [tokensPerBlock, paused, stakedCount, currentBlock, totalEarned] = await Promise.all(promises);
         setTotalStaked(stakedCount);
         setBlockRewardPerStakedNft(weiToNumeric(tokensPerBlock, 18) / stakedCount);
-        setPoolState(paused ? 'NotStarted' : 'Active');
+
+        let state: PoolState;
+        if (currentBlock > blockRewardsEndsInBlock) {
+            state = 'Ended';
+        } else {
+            state = paused ? 'NotStarted' : 'Active';
+        }
+
+        setPoolState(state);
         if (typeof totalEarned !== 'undefined') {
             setTotalEarned(weiToNumeric(totalEarned, 18));
         }
@@ -100,7 +118,7 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
 
     useInterval(() => {
         if (wrapper) {
-            intervalBeat(wrapper, walletAddress);
+            intervalBeat(wrapper, blockRewardsEndsInBlock, walletAddress);
         }
     }, 5000);
 
@@ -108,9 +126,9 @@ export const PoolContractProvider: React.FC<PropsWithChildren<{}>> = ({ children
         try {
             const contract = new ethers.Contract(poolBaseInfo.poolContractAddress, abi, user.getSignerOrProvider(poolBaseInfo.networkId));
             const wrapper = new PoolContractWrapper(contract);
-            await intervalBeat(wrapper);
 
             const rewardsEndInBlock = await wrapper.getRewardsEndInBlock();
+            await intervalBeat(wrapper, rewardsEndInBlock);
 
             setWrapper(wrapper);
             setBlockRewardsEndsInBlock(rewardsEndInBlock);

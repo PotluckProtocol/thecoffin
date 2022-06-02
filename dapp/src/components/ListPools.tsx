@@ -9,7 +9,7 @@ import { PoolItemWrapper } from "./PoolItemWrapper";
 import { RoundedButton } from "./RoundedButton";
 
 export type ListPoolsProps = {
-    mode: 'basic' | 'harvest';
+    mode: 'basic' | 'harvest' | 'ended';
 }
 
 type ContainerProps = {
