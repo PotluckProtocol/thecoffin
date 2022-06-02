@@ -1,5 +1,13 @@
 [
     {
+        "name": "Obsession",
+        "coverImage": "/images/pools/obsession/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0xf0c510d9633fa61debe9e6824c93ff342e280149",
+        "nftContractAddress": "0x96AE96b5f9068DCb6A532018Ee60fFcdD4F33085",
+        "networkId": 250
+    },
+    {
         "name": "Cyberfantomic",
         "coverImage": "/images/pools/cyberfantomic/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
