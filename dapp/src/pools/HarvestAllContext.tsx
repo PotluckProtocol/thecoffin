@@ -14,7 +14,6 @@ export const HarvestAllProvider: React.FC<PropsWithChildren<{}>> = ({ children }
 
     const contextValue: HarvestAllContextType = {
         requestHarvestingAll: () => {
-            console.log('HARVESTING ALL', handlerMap)
             const handlers = Object.values(handlerMap);
             for (const handler of handlers) {
                 handler();

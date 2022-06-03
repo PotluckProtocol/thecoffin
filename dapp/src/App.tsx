@@ -82,7 +82,7 @@ const App: React.FC = () => {
 
     const caveCompounderContext = useContext(CaveCompounderContext);
     const user = useUser();
-    const [mode, setMode] = useState<'basic' | 'harvest'>('basic')
+    const [mode, setMode] = useState<'basic' | 'harvest' | 'ended'>('basic')
     const [view, setView] = useState<View>('open');
 
     useEffect(() => {
@@ -121,24 +121,19 @@ const App: React.FC = () => {
         const nextView = buttonGroup.value as View;
         setView(nextView);
 
-        // Change also to basic mode for not entering
-        // ended view with harvest mode
-        if (nextView === 'ended') {
-            setMode('basic');
-        }
+        // Change also to mode to match the view 
+        setMode(nextView === 'ended' ? 'ended' : 'basic');
     }
 
     const buttonGroup: GroupButton[] = [{
-        text: 'Open',
+        text: 'Active pools',
         value: 'open',
         active: view === 'open'
     }, {
-        text: 'Ended',
+        text: 'Ended pools',
         value: 'ended',
         active: view === 'ended'
     }];
-
-    console.log('STYLES', JSON.stringify(buttonGroupStyle));
 
     return (
         <div className="App relative">

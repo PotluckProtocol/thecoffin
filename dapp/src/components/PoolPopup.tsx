@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 
 export type PoolPopupProps = {
     poolBaseInfo: PoolBaseInfo;
-    unstakeOnly?: boolean;
+    isFinishedPool?: boolean;
     onClose: () => void;
 }
 
@@ -103,10 +103,15 @@ const activeButtonStyle: CSSProperties = {
     color: "black"
 }
 
+const RewardsEndedInfo = styled.p`
+    color: white;
+    font-size: .9rem;
+`;
+
 export const PoolPopup: React.FC<PoolPopupProps> = ({
     poolBaseInfo,
     onClose,
-    unstakeOnly
+    isFinishedPool
 }) => {
     const backdropRef = useRef(null);
     const nftContractContext = useContext(NFTContractContext);
@@ -114,7 +119,7 @@ export const PoolPopup: React.FC<PoolPopupProps> = ({
 
     const [isLoadingWalletTokens, setIsLoadingWalletTokens] = useState(false);
 
-    const [selectedView, setSelectedView] = useState<string>(unstakeOnly ? 'unstake' : 'stake');
+    const [selectedView, setSelectedView] = useState<string>(isFinishedPool ? 'unstake' : 'stake');
     const [selectedTokens, setSelectedTokens] = useState<number[]>([]);
 
     useEffect(() => {
@@ -266,15 +271,19 @@ export const PoolPopup: React.FC<PoolPopupProps> = ({
                     <FiXCircle size={30} />
                 </CloseButton>
                 <PoolName className="flex items-center justify-center mb-4" height={45}>{poolBaseInfo.name}</PoolName>
-                <Paragraph className="mb-2">Your intent?</Paragraph>
+                {isFinishedPool ? (
+                    <RewardsEndedInfo>Pool rewards has been ended. Unharvested rewards are paid on unstake.</RewardsEndedInfo>
+                ) : (
+                    <>
+                        <Paragraph className="mb-2">Your intent?</Paragraph>
 
-                {!unstakeOnly && (
-                    <ButtonGroup
-                        buttons={buttonGroupButtons}
-                        buttonStyle={buttonStyle}
-                        activeButtonStyle={activeButtonStyle}
-                        onSelect={handleSelectView}
-                    />
+                        <ButtonGroup
+                            buttons={buttonGroupButtons}
+                            buttonStyle={buttonStyle}
+                            activeButtonStyle={activeButtonStyle}
+                            onSelect={handleSelectView}
+                        />
+                    </>
                 )}
 
                 {viewContent}

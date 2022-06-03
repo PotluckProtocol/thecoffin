@@ -4,7 +4,6 @@ import styled from "styled-components";
 import useUser from "../account/useUser";
 import { HarvestAllContext } from "../pools/HarvestAllContext";
 import { useAllPoolsBaseInfo } from "../pools/useAllPoolsBaseInfo"
-import { NetworkIcon } from "./NetworkIcon";
 import { PoolItemWrapper } from "./PoolItemWrapper";
 import { RoundedButton } from "./RoundedButton";
 
@@ -66,7 +65,6 @@ export const ListPools: React.FC<ListPoolsProps> = (props) => {
     const allPools = useAllPoolsBaseInfo();
     const user = useUser();
     const harvestAllContext = useContext(HarvestAllContext);
-
     const wrongNetwork = !!user.account && ![250, 4002].includes(user.account.network.networkId);
 
     return (

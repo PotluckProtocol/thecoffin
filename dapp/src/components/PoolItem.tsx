@@ -1,15 +1,13 @@
 import { ComponentPropsWithoutRef, ReactNode, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import moment from 'moment';
 import useUser from "../account/useUser";
 import { NFTContractContext } from "../nft-contract/NFTContractContext";
 import { PoolContractContext } from "../pools/pool-contract/PoolContractContext";
 import { PoolBaseInfo } from "../pools/PoolBaseInfo"
 import { PoolPopup } from "./PoolPopup";
-import { RoundedButton, RoundedButtonProps } from "./RoundedButton";
+import { RoundedButton } from "./RoundedButton";
 import { SimpleItemPair } from "./SimpleItemPair";
 import { TextFit } from "./TextFit";
-import { Loading } from "./Loading";
 import { toast } from "react-toastify";
 import { NetworkIcon } from "./NetworkIcon";
 import classNames from "classnames";
@@ -182,7 +180,13 @@ export const PoolItem: React.FC<PoolItemProps> = ({
 
     useEffect(() => {
         const init = async () => {
-            poolContractContext.init(baseInfo);
+            try {
+                await poolContractContext.init(baseInfo);
+            } catch (e) {
+                console.log('Pool Contract init failed', baseInfo.name, e);
+                throw e;
+            }
+
             try {
                 await nftContractContext.init({
                     contractAddress: baseInfo.nftContractAddress,
@@ -190,7 +194,8 @@ export const PoolItem: React.FC<PoolItemProps> = ({
                     poolContractAddress: baseInfo.poolContractAddress
                 });
             } catch (e) {
-                console.log('Init failed', e);
+                console.log('NFT Contract init failed', baseInfo.name, e);
+                throw e;
             }
         }
 
@@ -198,8 +203,6 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     }, []);
 
     const hasStake = poolContractContext.walletTokenIds.length > 0;
-
-    //    const hasStake = !!poolContractContext.totalEarned;
 
     useEffect(() => {
 
@@ -230,7 +233,17 @@ export const PoolItem: React.FC<PoolItemProps> = ({
         }
     }, [poolContractContext.isInitialized, isConnected]);
 
-    if (!nftContractContext.isInitialized) {
+    // Show this item on list only if 
+    // a) Pool is ended and UI shows ended pools
+    // b) Pool is not ended and UI shows active pools
+    const shouldBeVisibleInThisMode = (
+        (poolContractContext.poolState === 'Ended' && rawMode === 'ended') ||
+        (poolContractContext.poolState !== 'Ended' && rawMode !== 'ended')
+    );
+
+    const isInitialized = poolContractContext.isInitialized && nftContractContext.isInitialized;
+
+    if (!isInitialized || !shouldBeVisibleInThisMode) {
         return null;
     }
 
@@ -238,7 +251,6 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     if (poolContractContext.totalEarned !== null) {
         earned = amountToString(poolContractContext.totalEarned);
     }
-
 
     let dailyReward = 'TBA';
     if (poolContractContext.totalStaked > 0) {
@@ -251,9 +263,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     const mode = active ? rawMode : 'basic';
 
     const handleButtonClick = async () => {
-        if (mode === 'basic') {
-            setIsPopupOpen(true)
-        } else {
+        if (mode === 'harvest') {
             try {
                 await poolContractContext.harvest();
                 toast(`Successfully raided the ${baseInfo.name} grave`, { type: 'success', theme: 'colored' });
@@ -261,18 +271,14 @@ export const PoolItem: React.FC<PoolItemProps> = ({
                 console.log('Harvesting failed', e);
                 toast('Harvesting failed', { type: 'error', theme: 'colored' });
             }
+        } else {
+            setIsPopupOpen(true);
         }
     }
 
-    const isInitialized = poolContractContext.isInitialized && nftContractContext.isInitialized;
+
     let content: ReactNode;
-    if (!isInitialized) {
-        content = (
-            <div className="mt-4">
-                <Loading width={80} size={8} />\
-            </div>
-        );
-    } else if (poolContractContext.poolState === 'NotStarted') {
+    if (poolContractContext.poolState === 'NotStarted') {
         content = (
             <PoolNotStartedText className="mt-4">
                 Waiting the coffin to be filled and closed...
@@ -375,7 +381,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
             {isPopupOpen && (
                 <PoolPopup
                     poolBaseInfo={baseInfo}
-                    unstakeOnly={mode === 'ended'}
+                    isFinishedPool={mode === 'ended'}
                     onClose={() => setIsPopupOpen(false)}
                 />
             )}
