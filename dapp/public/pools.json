@@ -1,5 +1,13 @@
 [
     {
+        "name": "Potluck Realm Elves",
+        "coverImage": "/images/pools/elves/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x7cF3436335De07423b571110852F046AaF45551e",
+        "nftContractAddress": "0x7Cca36B5F8fc47d8bA4CEc8c4004Bd0d7518B3FB",
+        "networkId": 250
+    },
+    {
         "name": "Obsession",
         "coverImage": "/images/pools/obsession/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
