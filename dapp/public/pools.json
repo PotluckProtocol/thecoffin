@@ -1,5 +1,13 @@
 [
     {
+        "name": "Bot Squad Chickens",
+        "coverImage": "/images/pools/chickens/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0xF1705A9156bEd43670fd156EcF7598b200B7bDD9",
+        "nftContractAddress": "0xF88b3020AE6C58B4382E01955F7e5c5c3Dd192FC",
+        "networkId": 250
+    },
+    {
         "name": "Potluck Realm Elves",
         "coverImage": "/images/pools/elves/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
