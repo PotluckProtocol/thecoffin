@@ -1,5 +1,14 @@
 [
     {
+       
+        "name": "Fantom Alpha Fiendz",
+        "coverImage": "/images/pools/fantomalphafiendz/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x019AfD2BC9cAE3EB4ba75bCA46BBcd4019f5eF82",
+        "nftContractAddress": "0xB183341A1FC7C851df05E01bf98EE683080B7e8C",
+        "networkId": 250
+    },
+    {
         "name": "Bot Squad Chickens",
         "coverImage": "/images/pools/chickens/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
