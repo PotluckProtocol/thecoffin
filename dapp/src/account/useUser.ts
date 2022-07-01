@@ -12,7 +12,7 @@ const PUBLIC_PROVIDER_MAP: any = {
     },
     250: {
         isPublic: true,
-        web3: new ethers.providers.JsonRpcProvider('https://rpc.ftm.tools/')
+        web3: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/fantom/')
     },
     4002: {
         isPublic: true,

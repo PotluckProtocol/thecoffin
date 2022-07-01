@@ -1,6 +1,13 @@
 [
     {
-       
+        "name": "Arbiters of the Deep",
+        "coverImage": "/images/pools/arbiters/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0xFF11a7B9D22FB7b532851D9Db815a3a60f9C750b",
+        "nftContractAddress": "0xA923bBFB33BBB1fB7306B2781336F75dACB1A62f",
+        "networkId": 250
+    },
+    {
         "name": "Fantom Alpha Fiendz",
         "coverImage": "/images/pools/fantomalphafiendz/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
