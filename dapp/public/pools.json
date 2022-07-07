@@ -1,5 +1,13 @@
 [
     {
+        "name": "Ghoulish Divas",
+        "coverImage": "/images/pools/ghoulishdivas/cover.jpg",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x194e0b824F2276bbb8E29880eB88C00F250287aF",
+        "nftContractAddress": "0xAf01EDC305a11e6a765765b3E2C3d16f9466C10A",
+        "networkId": 250
+    },
+    {
         "name": "Arbiters of the Deep",
         "coverImage": "/images/pools/arbiters/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
