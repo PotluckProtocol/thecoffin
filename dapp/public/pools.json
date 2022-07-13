@@ -1,5 +1,21 @@
 [
     {
+        "name": "Shamanic Tribe",
+        "coverImage": "/images/pools/shamanictribe/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x70F3E6e4fF75A231F8Bd489BfedF188b4EBCe05B",
+        "nftContractAddress": "0x3fB9db410034eE46f531dD802c94215A29e5f0e4",
+        "networkId": 250
+    },
+    {
+        "name": "Dgnz Addictions",
+        "coverImage": "/images/pools/dgnzaddictions/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x5419c5913712A83C72478E3bd8e8278290F730b9",
+        "nftContractAddress": "0xa6377C4Dd8D6758A7062130099E2C989A32dc657",
+        "networkId": 250
+    },
+    {
         "name": "Ghoulish Divas",
         "coverImage": "/images/pools/ghoulishdivas/cover.jpg",
         "rewardTokenSymbol": "FANG-FTM LP",
