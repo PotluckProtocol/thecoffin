@@ -1,5 +1,13 @@
 [
     {
+        "name": "The Precious 2",
+        "coverImage": "/images/pools/ring/cover2.jpg",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x18C5EcD76Bb0bcFb5f7026ab9f5e04e96f0AC2E9",
+        "nftContractAddress": "0xDf7834cEaDCB94Ef67fBE52BA8ce4c6B2ee12bCc",
+        "networkId": 250
+    },
+    {
         "name": "Shamanic Tribe",
         "coverImage": "/images/pools/shamanictribe/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
