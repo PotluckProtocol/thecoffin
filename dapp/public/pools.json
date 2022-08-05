@@ -1,5 +1,21 @@
 [
     {
+        "name": "Cosmic Frens",
+        "coverImage": "/images/pools/cosmicfrens/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0xD8Dbf3B86D0ffC6770D8C04a2e884aF07f677740",
+        "nftContractAddress": "0x3396d660653612Ba06Ea9259316aad2E962F964c",
+        "networkId": 250
+    },
+    {
+        "name": "BitKillas",
+        "coverImage": "/images/pools/bitkillas/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x4498F24bfB31A9D9deC30A5729D6277AB1866E76",
+        "nftContractAddress": "0x37cA384bc7Dcf7aa2b71D30Af2b6F09e5746d2AC",
+        "networkId": 250
+    },
+    {
         "name": "The Precious 2",
         "coverImage": "/images/pools/ring/cover2.jpg",
         "rewardTokenSymbol": "FANG-FTM LP",
