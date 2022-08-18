@@ -1,5 +1,13 @@
 [
     {
+        "name": "Dgnz Addictions 2",
+        "coverImage": "/images/pools/dgnzaddictions/cover.png",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x3A8fB59ecaa0dfC97BF686145736264dCe905d62",
+        "nftContractAddress": "0xa6377C4Dd8D6758A7062130099E2C989A32dc657",
+        "networkId": 250
+    },
+    {
         "name": "Cosmic Frens",
         "coverImage": "/images/pools/cosmicfrens/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
