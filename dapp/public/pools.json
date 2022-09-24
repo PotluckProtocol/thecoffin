@@ -1,5 +1,13 @@
 [
     {
+        "name": "The Precious 3",
+        "coverImage": "/images/pools/ring/cover2.jpg",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0xc86e9AB29527035e92A5FaA5C0CCe2E44b63CC47",
+        "nftContractAddress": "0xDf7834cEaDCB94Ef67fBE52BA8ce4c6B2ee12bCc",
+        "networkId": 250
+    },
+    {
         "name": "Dgnz Addictions 2",
         "coverImage": "/images/pools/dgnzaddictions/cover.png",
         "rewardTokenSymbol": "FANG-FTM LP",
