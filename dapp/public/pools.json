@@ -1,5 +1,13 @@
 [
     {
+        "name": "The Precious 4",
+        "coverImage": "/images/pools/ring/cover2.jpg",
+        "rewardTokenSymbol": "FANG-FTM LP",
+        "poolContractAddress": "0x66b015951d90D2D57C90678b19a067F8E6180B66",
+        "nftContractAddress": "0xDf7834cEaDCB94Ef67fBE52BA8ce4c6B2ee12bCc",
+        "networkId": 250
+    },
+    {
         "name": "The Precious 3",
         "coverImage": "/images/pools/ring/cover2.jpg",
         "rewardTokenSymbol": "FANG-FTM LP",
